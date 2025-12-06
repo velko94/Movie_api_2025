@@ -116,7 +116,7 @@ def check_existing_tables():
 
 
 # if the tables are not quite good, or you have some issue with the keys or column names
-# should be called speicifically no option of it yet
+# should be called specifically no option of it yet
 def check_db_state():
     conn, cur = get_connection()
     cur.execute("PRAGMA table_info(movie);")
