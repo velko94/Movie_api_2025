@@ -1,6 +1,7 @@
 # Movie_api_GUI
 
-This is an API that works from the CLI (command-line interface). Its purpose is to be used in a site to manage a movie library, which will be built later.
+This is an API that works from the CLI (command-line interface). Its purpose is to be used in a site to manage a movie
+library, which will be built later.
 
 With this API, you can:
 
@@ -43,7 +44,7 @@ py .\movie_api_GUI.py
 ### Main Commands
 
 | Command | Action                                                       |
-| ------- | ------------------------------------------------------------ |
+|---------|--------------------------------------------------------------|
 | movslt  | List all movies                                              |
 | movdt   | View movie details                                           |
 | movsrch | Search movies by name, genre, year, director, or description |
@@ -72,7 +73,7 @@ The project uses a SQLite database (`Movie.db`) with the following tables:
 ### `movie` table
 
 | Column       | Type    | Constraints                      | Description                      |
-| ------------ | ------- | -------------------------------- | -------------------------------- |
+|--------------|---------|----------------------------------|----------------------------------|
 | ID           | INTEGER | PRIMARY KEY AUTOINCREMENT UNIQUE | Unique identifier for each movie |
 | MOVIE_TITLE  | TEXT    | NOT NULL, UNIQUE                 | Movie title                      |
 | GENRE        | TEXT    |                                  | Movie genre                      |
@@ -86,7 +87,7 @@ The project uses a SQLite database (`Movie.db`) with the following tables:
 ### `users` table
 
 | Column    | Type    | Constraints               | Description                     |
-| --------- | ------- | ------------------------- | ------------------------------- |
+|-----------|---------|---------------------------|---------------------------------|
 | ID        | INTEGER | PRIMARY KEY AUTOINCREMENT | Unique identifier for each user |
 | USER_NAME | TEXT    | NOT NULL, UNIQUE          | Username                        |
 
@@ -95,7 +96,7 @@ The project uses a SQLite database (`Movie.db`) with the following tables:
 ### `favorites` table
 
 | Column      | Type    | Constraints                                | Description                               |
-| ----------- | ------- | ------------------------------------------ | ----------------------------------------- |
+|-------------|---------|--------------------------------------------|-------------------------------------------|
 | ID          | INTEGER | PRIMARY KEY AUTOINCREMENT                  | Unique identifier for each favorite entry |
 | MOVIE_TITLE | TEXT    | NOT NULL, FOREIGN KEY → movie(MOVIE_TITLE) | Title of the favorite movie               |
 | GENRE       | TEXT    |                                            | Genre of the favorite movie               |
@@ -126,7 +127,8 @@ python movie_api_GUI.py
 
 ## Contributing
 
-If you have suggestions, please fork the repo and create a pull request. You can also open an issue with the tag **enhancement**.
+If you have suggestions, please fork the repo and create a pull request. You can also open an issue with the tag *
+*enhancement**.
 
 **Steps:**
 
