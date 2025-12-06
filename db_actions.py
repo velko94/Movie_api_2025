@@ -1,10 +1,8 @@
 # TABLE MANAGEMENT FUNCTIONS#
+from db_connection import get_connection
+global exists
 from variables import wrong_choice
 from pprint import pprint
-from db_connection import get_connection
-
-global exists
-
 
 # creating the movie table
 def movie_table():
