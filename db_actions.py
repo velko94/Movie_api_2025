@@ -67,7 +67,7 @@ def table_delete():
         conn.close()
 
 
-# failback if you delete the wrong table
+# fallback if you delete the wrong table
 def recreate_existing_table():
     table_name = input("What is the name of the table ")
     choice1 = 'movie'
@@ -87,64 +87,7 @@ def recreate_existing_table():
         recreate_existing_table()
 
 
-def check_existing_tables():
-    conn, cur = get_connection()
-    cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    table_exist = [row[0] for row in cur.fetchall()]
-    conn.close()
-    return table_exist
-
-
-# if the tables are not quite good, or you have some issue with the keys or column names
-def check_db_state():
-    conn, cur = get_connection()
-    cur.execute("PRAGMA table_info(movie);")
-
-    pprint(cur.fetchall())
-    conn.close()
-
-
-def list_tables():
-    conn, cur = get_connection()
-    cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    tables = [row[0] for row in cur.fetchall()]
-    conn.close()
-    print(tables)
-    return tables
-
-
-# fixing the table movie without losing the data
-def copy_existing_table():
-    conn, cur = get_connection()
-    cur.execute('''CREATE TABLE movie_new (
-    ID INTEGER PRIMARY KEY AUTOINCREMENT,
-    MOVIE_TITLE TEXT NOT NULL UNIQUE,
-    GENRE TEXT,
-    DIRECTOR TEXT,
-    DESCRIPTION TEXT,
-    RELEASE_YEAR INTEGER,
-    LIKENESS INTEGER
-);''')
-    conn.commit()
-    conn.close()
-
-
-def actual_copy():
-    conn, cur = get_connection()
-    cur.execute('''INSERT INTO movie_new (ID, MOVIE_TITLE, GENRE, DIRECTOR, DESCRIPTION, RELEASE_YEAR, LIKENESS)
-  SELECT ID, MOVIE_TITLE, GENRE, DIRECTOR, DESCRIPTION, RELEASE_YEAR, LIKENESS
-  FROM movie;''')
-    conn.commit()
-    conn.close()
-
-
-def change_name_of_table():
-    conn, cur = get_connection()
-    conn.execute('ALTER TABLE movie_new RENAME TO movie;')
-    conn.commit()
-    conn.close()
-
-
+# Major check if the tabel exists
 def get_unique_movie_title(exclude_id=None):
     global exists
     conn, cur = get_connection()
@@ -162,3 +105,64 @@ def get_unique_movie_title(exclude_id=None):
     else:
         conn.close()
         return title
+
+
+def check_existing_tables():
+    conn, cur = get_connection()
+    cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    table_exist = [row[0] for row in cur.fetchall()]
+    conn.close()
+    return table_exist
+
+
+# if the tables are not quite good, or you have some issue with the keys or column names
+# should be called speicifically no option of it yet
+def check_db_state():
+    conn, cur = get_connection()
+    cur.execute("PRAGMA table_info(movie);")
+
+    pprint(cur.fetchall())
+    conn.close()
+
+
+def list_tables():
+    conn, cur = get_connection()
+    cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = [row[0] for row in cur.fetchall()]
+    conn.close()
+    print(tables)
+    return tables
+
+
+# The bellow should be used if the table must be altered or was created wrong
+def copy_existing_table():
+    conn, cur = get_connection()
+    cur.execute('''CREATE TABLE movie_new (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    MOVIE_TITLE TEXT NOT NULL UNIQUE,
+    GENRE TEXT,
+    DIRECTOR TEXT,
+    DESCRIPTION TEXT,
+    RELEASE_YEAR INTEGER,
+    LIKENESS INTEGER
+);''')
+    conn.commit()
+    conn.close()
+
+
+# Copies the current data of the table
+def actual_copy():
+    conn, cur = get_connection()
+    cur.execute('''INSERT INTO movie_new (ID, MOVIE_TITLE, GENRE, DIRECTOR, DESCRIPTION, RELEASE_YEAR, LIKENESS)
+  SELECT ID, MOVIE_TITLE, GENRE, DIRECTOR, DESCRIPTION, RELEASE_YEAR, LIKENESS
+  FROM movie;''')
+    conn.commit()
+    conn.close()
+
+
+# This should be used after the table was correctly recreated
+def change_name_of_table():
+    conn, cur = get_connection()
+    conn.execute('ALTER TABLE movie_new RENAME TO movie;')
+    conn.commit()
+    conn.close()
