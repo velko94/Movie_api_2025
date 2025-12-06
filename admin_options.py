@@ -106,7 +106,7 @@ def update_year():
     conn.close()
 
 
-# to update a single record in the db uses above functions
+# THis is the engine for updating a single record in the db and uses above functions
 def admin_update():
     print("choices are 'name', 'genre', 'director', 'description', 'year' ")
     update = input("what to update ")
