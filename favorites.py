@@ -1,6 +1,6 @@
-from variables import wrong_choice, check_output
-from db_connection import get_connection
 from pprint import pprint
+from db_connection import get_connection
+from variables import wrong_choice, check_output
 
 
 def favorites_menu(username):
