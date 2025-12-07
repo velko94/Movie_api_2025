@@ -1,4 +1,7 @@
 from pprint import pprint
+
+import db_actions
+
 global movie_name, genre, desc, year, direct, rate
 
 
@@ -73,42 +76,38 @@ def check_input_name():
     if len(movie_name) <= 1:
         wrong_choice()
         print("Not a correct name")
-    else:
-        return movie_name
+        return name()
+    return movie_name
 
 
 def check_input_genre():
     if len(genre) <= 1:
         wrong_choice()
         print("Not a correct genre")
-        input_genre()
-    else:
-        return genre
+        return input_genre()
+    return genre
 
 
 def check_input_desc():
     if len(desc) <= 1:
         wrong_choice()
         print("Not a correct description")
-        description()
-    else:
-        return desc
+        return description()
+    return desc
 
 
 def check_input_dir():
     if len(direct) == 0:
         wrong_choice()
         print("Not a correct director")
-        director_name()
-    else:
-        return direct
+        return director_name()
+    return direct
 
 
 # Takes all the required fields and stores them for future use
 def user_input():
-    from db_actions import get_unique_movie_title
     global movie_name
-    movie_name = get_unique_movie_title()
+    movie_name = db_actions.get_unique_movie_title()
     description()
     release_year()
     director_name()
