@@ -7,8 +7,8 @@ from db_connection import get_connection
 
 # creating the movie table
 def movie_table():
-    conn = get_connection()
-    conn.execute(
+    conn, cur = get_connection()
+    cur.execute(
         '''CREATE TABLE IF NOT EXISTS movie (
     ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
     MOVIE_TITLE TEXT NOT NULL UNIQUE,
@@ -24,20 +24,20 @@ def movie_table():
 
 # creating the users table
 def users_table():
-    conn = get_connection()
-    conn.execute('''
+    conn, cur = get_connection()
+    cur.execute('''
     CREATE TABLE IF NOT EXISTS users (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     USER_NAME TEXT NOT NULL UNIQUE);'''
-                 )
+                )
     conn.commit()
     conn.close()
 
 
 # create the favourites table
 def favorites_table():
-    conn = get_connection()
-    conn.execute(
+    conn, cur = get_connection()
+    cur.execute(
         '''CREATE TABLE IF NOT EXISTS favorites (
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         MOVIE_TITLE TEXT NOT NULL,
@@ -79,6 +79,10 @@ def table_delete():
 def recreate_existing_table():
     while True:
         table_name = input("What is the name of the table ").strip().lower()
+        existing = [t.lower() for t in check_existing_tables()]
+        if table_name not in ('movie','favorites','users'):
+            variables.wrong_choice()
+            continue
         if table_name == 'movie':
             movie_table()
             print("table movie was created")
