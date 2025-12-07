@@ -4,7 +4,7 @@ from movie_search import search_menu
 from movie_details import details
 from movie_ranglist import ranglist_menu
 from movie_list import list_of_movies
-from admin_options import admin_actions
+import admin_options
 import variables
 from users import check_user
 
@@ -42,7 +42,7 @@ def actions(choice=None):
         all_done()
     elif choice in ['movadm', '--movadm']:
         print("Showing ADMIN MENU")
-        admin_actions()
+        admin_options.admin_menu()
         all_done()
     elif choice == "exit":
         print("Alright, have a nice day!")
@@ -70,6 +70,7 @@ def all_done():
         all_done()
 
 
+#Used so that the main command can be called from the terminal directly
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         # Take the first CLI argument as the choice

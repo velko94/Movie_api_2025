@@ -80,6 +80,7 @@ def check_input_name():
     return movie_name
 
 
+
 def check_input_genre():
     if len(genre) <= 1:
         wrong_choice()

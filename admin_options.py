@@ -1,7 +1,7 @@
-import variables
 import db_actions
 import db_connection
 import movie_list
+import variables
 
 
 def admin_menu():
