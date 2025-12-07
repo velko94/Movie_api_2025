@@ -80,7 +80,6 @@ def recreate_existing_table():
     while True:
         table_name = input("What is the name of the table ").strip().lower()
         existing = [t.lower() for t in check_existing_tables()]
-
         if table_name in existing:
             print(f"Table '{table_name}' already exists.")
             return "exists"
@@ -132,7 +131,6 @@ def check_existing_tables():
     )
     table_exist = [row[0] for row in cur.fetchall()]
     conn.close()
-    print(f"Table {table_exist} already exists in the db ")
     return table_exist
 
 
