@@ -1,7 +1,7 @@
 import variables
 import db_actions
-from db_connection import get_connection
-from movie_list import list_of_movies_admin
+import db_connection
+import movie_list
 
 global movid
 
@@ -13,17 +13,19 @@ def admin_menu():
     print("choice 4:want to delete a record from a table")
     print("choice 5:want to change something in a record")
     print("choice 6:want to exit the admin menu")
+    admin_actions()
 
 
 # The functionalities for the admin menu
 def admin_actions():
+
     choice = input("What do you want to do use only digits ", )
     if choice == '1':
-        list_of_movies_admin()
+        movie_list.list_of_movies_admin()
         print("choice 1:want to list all movies")
     elif choice == '2':
         print("Soo choice 2:want to recreate a  table")
-        db_actions.check_existing_tables()
+        db_actions.recreate_existing_table()
     elif choice == '3':
         print("choice 3:want to delete a whole table")
         db_actions.table_delete()
@@ -43,7 +45,7 @@ def admin_actions():
 
 
 def run_update(query, params):
-    conn, cur = get_connection()
+    conn, cur = db_actions.get_connection()
     try:
         cur.execute(query, params)
         conn.commit()
@@ -119,7 +121,7 @@ def admin_delete_record():
         print("Invalid table name!")
         return admin_delete_record()
     movies_id = movie_id()
-    conn, cur = get_connection()
+    conn, cur = db_connection.get_connection()
     cur.execute(f"SELECT 1 FROM {table_to_delete} WHERE ID = ?", (movies_id,))
     result = cur.fetchone()
     if not result:
