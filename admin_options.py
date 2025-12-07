@@ -1,7 +1,7 @@
-from movie_list import list_of_movies_admin
 import variables
-from db_connection import get_connection
 from db_actions import recreate_existing_table, table_delete
+from db_connection import get_connection
+from movie_list import list_of_movies_admin
 
 global movid
 
@@ -20,7 +20,7 @@ def admin_actions():
     admin_menu()
     choice = input("What do you want to do use only digits ", )
     if choice == '1':
-        list_of_movies_admin()  # called form movie_list
+        list_of_movies_admin()
         print("choice 1:want to list all movies")
     elif choice == '2':
         print("Soo choice 2:want to recreate a  table")
@@ -43,6 +43,15 @@ def admin_actions():
         admin_menu()
 
 
+def run_update(query, params):
+    conn, cur = get_connection()
+    try:
+        cur.execute(query, params)
+        conn.commit()
+    finally:
+        conn.close()
+
+
 # FUNCTIONS FOR UPDATES ON EXISTING RECORDS#
 def check_table():
     conn, cur = get_connection()
@@ -61,49 +70,36 @@ def movie_id():
 
 
 def update_name():
-    conn, cur = get_connection()
     print("Change the name to the value you wish to be")
     variables.name()
     movie_id()
-    cur.execute("UPDATE movie SET MOVIE_TITLE=?WHERE ID=?;", [variables.movie_name, movid])
-    conn.commit()
-    conn.close()
+    run_update("UPDATE movie SET MOVIE_TITLE=? WHERE ID=?;", [variables.movie_name, movid])
 
 
 def update_genre():
-    conn, cur = get_connection()
     variables.input_genre()
     movie_id()
-    cur.execute("UPDATE movie SET GENRE=?  WHERE ID=? ", [variables.genre, movid])
-    conn.commit()
-    conn.close()
+    run_update("UPDATE movie SET GENRE=?  WHERE ID=? ", [variables.genre, movid])
+
 
 
 def update_director():
-    conn, cur = get_connection()
     variables.director_name()
     movie_id()
-    cur.execute("UPDATE movie SET DIRECTOR=?  WHERE ID=? ", [variables.direct, movid])
-    conn.commit()
-    conn.close()
+    run_update("UPDATE movie SET DIRECTOR=?  WHERE ID=? ", [variables.direct, movid])
 
 
 def update_desc():
-    conn, cur = get_connection()
     variables.description()
     movie_id()
-    cur.execute("UPDATE movie SET DESCRIPTION=?  WHERE ID=? ", [variables.description, movid])
-    conn.commit()
-    conn.close()
+    run_update("UPDATE movie SET DESCRIPTION=?  WHERE ID=? ", [variables.description, movid])
 
 
 def update_year():
-    conn, cur = get_connection()
     variables.release_year()
     movie_id()
-    cur.execute("UPDATE movie SET RELEASE_YEAR=?  WHERE ID=? ", [variables.year, movid])
-    conn.commit()
-    conn.close()
+    run_update("UPDATE movie SET RELEASE_YEAR=?  WHERE ID=? ", [variables.year, movid])
+
 
 
 # THis is the engine for updating a single record in the db and uses above functions
@@ -140,9 +136,7 @@ def admin_delete_record():
         conn.close()
         return admin_delete_record()
     else:
-        conn, cur = get_connection()  # called from db_connections
         cur.execute(f"DELETE FROM {table_to_delete} WHERE ID = ?;", (movies_id,))
-
         print("record", movies_id, "was deleted  from", table_to_delete)
         # To reset the id's and keep them in correct order
         cur.execute("DELETE FROM sqlite_sequence WHERE name='movie'")
