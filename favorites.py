@@ -1,5 +1,6 @@
 from variables import wrong_choice, check_output
 from db_connection import get_connection
+from pprint import pprint
 
 
 def favorites_menu(username):
@@ -21,7 +22,7 @@ def favorites_engine(username):
         movie_api_GUI.actions()
     else:
         wrong_choice()
-        print("pleaase choose one of the following favlst, favadd, lv")
+        print("please choose one of the following favlst, favadd, lv")
         favorites_engine(username)
 
 
@@ -52,7 +53,6 @@ def see_list_of_favorites(username):
         [username])
     results = cur.fetchall()
     if results:
-        from pprint import pprint
         pprint(results)
     else:
         print("No favorites for this user")
