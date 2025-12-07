@@ -45,7 +45,7 @@ py .\movie_api_GUI.py
 
 | Command | Action                                                       |
 |---------|--------------------------------------------------------------|
-| movslt  | List all movies                                              |
+| movlst  | List all movies                                              |
 | movdt   | View movie details                                           |
 | movsrch | Search movies by name, genre, year, director, or description |
 | movadd  | Add a new movie                                              |
