@@ -1,5 +1,5 @@
 import variables
-from db_actions import recreate_existing_table, table_delete
+import db_actions
 from db_connection import get_connection
 from movie_list import list_of_movies_admin
 
@@ -17,17 +17,16 @@ def admin_menu():
 
 # The functionalities for the admin menu
 def admin_actions():
-    admin_menu()
     choice = input("What do you want to do use only digits ", )
     if choice == '1':
         list_of_movies_admin()
         print("choice 1:want to list all movies")
     elif choice == '2':
         print("Soo choice 2:want to recreate a  table")
-        recreate_existing_table()
+        db_actions.check_existing_tables()
     elif choice == '3':
         print("choice 3:want to delete a whole table")
-        table_delete()
+        db_actions.table_delete()
     elif choice == '4':
         print("choice 4: So want to delete a record from a table")
         admin_delete_record()
@@ -53,12 +52,6 @@ def run_update(query, params):
 
 
 # FUNCTIONS FOR UPDATES ON EXISTING RECORDS#
-def check_table():
-    conn, cur = get_connection()
-    cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    tables = [row[0] for row in cur.fetchall()]
-    return tables
-
 
 def movie_id():
     global movid
@@ -82,7 +75,6 @@ def update_genre():
     run_update("UPDATE movie SET GENRE=?  WHERE ID=? ", [variables.genre, movid])
 
 
-
 def update_director():
     variables.director_name()
     movie_id()
@@ -99,7 +91,6 @@ def update_year():
     variables.release_year()
     movie_id()
     run_update("UPDATE movie SET RELEASE_YEAR=?  WHERE ID=? ", [variables.year, movid])
-
 
 
 # THis is the engine for updating a single record in the db and uses above functions
@@ -122,7 +113,7 @@ def admin_update():
 
 # Deleting just a record from the table
 def admin_delete_record():
-    allowed_tables = check_table()
+    allowed_tables = db_actions.check_existing_tables()
     table_to_delete = input("What is the name of the table: ")
     if table_to_delete not in allowed_tables:
         print("Invalid table name!")
