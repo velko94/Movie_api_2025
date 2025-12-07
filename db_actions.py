@@ -1,13 +1,13 @@
 # TABLE MANAGEMENT FUNCTIONS#
 from pprint import pprint
 
+import db_connection
 import variables
-from db_connection import get_connection
 
 
 # creating the movie table
 def movie_table():
-    conn, cur = get_connection()
+    conn, cur = db_connection.get_connection()
     cur.execute(
         '''CREATE TABLE IF NOT EXISTS movie (
     ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -24,7 +24,7 @@ def movie_table():
 
 # creating the users table
 def users_table():
-    conn, cur = get_connection()
+    conn, cur = db_connection.get_connection()
     cur.execute('''
     CREATE TABLE IF NOT EXISTS users (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,7 +36,7 @@ def users_table():
 
 # create the favourites table
 def favorites_table():
-    conn, cur = get_connection()
+    conn, cur = db_connection.get_connection()
     cur.execute(
         '''CREATE TABLE IF NOT EXISTS favorites (
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,8 +57,8 @@ def favorites_table():
 def table_delete():
     while True:
 
-        table = str(input("what is the name of the table you want to drop "))
-        existing_tables = check_existing_tables()
+        table = input("what is the name of the table you want to drop ").strip().lower()
+        existing_tables = [t.lower() for t in check_existing_tables()]
         if table == "":
             print("Table name can't be empty")
             continue
@@ -67,10 +67,11 @@ def table_delete():
             print(f"Table '{table}' does not exist.")
             return
 
-        conn, cur = get_connection()
+        conn, cur = db_connection.get_connection()
         cur.execute(f"DROP TABLE {table};")
         conn.commit()
         conn.close()
+
         print(f"Table {table} was deleted.")
         return
 
@@ -82,7 +83,7 @@ def recreate_existing_table():
         existing = [t.lower() for t in check_existing_tables()]
         if table_name in existing:
             print(f"Table '{table_name}' already exists.")
-            return "exists"
+            return
 
         if table_name == 'movie':
             movie_table()
@@ -101,31 +102,32 @@ def recreate_existing_table():
 
 # Major check if the tabel exists
 def get_unique_movie_title(exclude_id=None):
-    title = variables.name()
+    while True:
+        title = variables.name()
 
-    conn, cur = get_connection()
+        conn, cur = db_connection.get_connection()
 
-    if exclude_id is not None:
-        cur.execute(
-            "SELECT 1 FROM movie WHERE MOVIE_TITLE=? AND ID!=?", (title, exclude_id)
-        )
-    else:
-        cur.execute(
-            "SELECT 1 FROM movie WHERE MOVIE_TITLE=?", (title,)
-        )
+        if exclude_id is not None:
+            cur.execute(
+                "SELECT 1 FROM movie WHERE MOVIE_TITLE=? AND ID!=?", (title, exclude_id)
+            )
+        else:
+            cur.execute(
+                "SELECT 1 FROM movie WHERE MOVIE_TITLE=?", (title,)
+            )
 
-    exists = cur.fetchone()
-    conn.close()
+        exists = cur.fetchone()
+        conn.close()
 
-    if exists:
-        print(f"'{title}' already exists. Please enter a different title.")
-        return get_unique_movie_title(exclude_id)
+        if exists:
+            print(f"'{title}' already exists. Please enter a different title.")
+            continue
 
-    return title
+        return title
 
 
 def check_existing_tables():
-    conn, cur = get_connection()
+    conn, cur = db_connection.get_connection()
     cur.execute(
         "SELECT name FROM sqlite_master WHERE type='table';"
     )
@@ -137,7 +139,7 @@ def check_existing_tables():
 # if the tables are not quite good, or you have some issue with the keys or column names
 # should be called specifically no option of it yet
 def check_db_state():
-    conn, cur = get_connection()
+    conn, cur = db_connection.get_connection()
     cur.execute(
         "PRAGMA table_info(movie);"
     )
@@ -147,7 +149,7 @@ def check_db_state():
 
 
 def list_tables():
-    conn, cur = get_connection()
+    conn, cur = db_connection.get_connection()
     cur.execute(
         "SELECT name FROM sqlite_master WHERE type='table';"
     )
@@ -159,7 +161,7 @@ def list_tables():
 
 # The bellow should be used if the table must be altered or was created wrong
 def copy_existing_table():
-    conn, cur = get_connection()
+    conn, cur = db_connection.get_connection()
     cur.execute(
         '''CREATE TABLE movie_new (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -177,7 +179,7 @@ def copy_existing_table():
 
 # Copies the current data of the table
 def actual_copy():
-    conn, cur = get_connection()
+    conn, cur = db_connection.get_connection()
     cur.execute(
         '''INSERT INTO movie_new (ID, MOVIE_TITLE, GENRE, DIRECTOR, DESCRIPTION, RELEASE_YEAR, LIKENESS)
   SELECT ID, MOVIE_TITLE, GENRE, DIRECTOR, DESCRIPTION, RELEASE_YEAR, LIKENESS
@@ -189,7 +191,7 @@ def actual_copy():
 
 # This should be used after the table was correctly recreated
 def change_name_of_table():
-    conn, cur = get_connection()
+    conn, cur = db_connection.get_connection()
     cur.execute(
         'ALTER TABLE movie_new RENAME TO movie;'
     )
