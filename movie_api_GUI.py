@@ -1,4 +1,5 @@
 import sys
+import os
 
 import admin_options
 import movie_add
@@ -8,6 +9,9 @@ import movie_ranglist
 import movie_search
 import users
 import variables
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def actions(choice=None):
@@ -53,11 +57,12 @@ def actions(choice=None):
             sys.exit(0)
         else:
             variables.wrong_choice()
-            if choice.startswith('--'):
-                sys.exit(1)
             choice = None
             continue
-
+        if not all_done():
+            sys.exit(0)
+        clear_screen()
+        choice = None
 
 # asking the person if he wants to continue
 
@@ -65,15 +70,15 @@ def all_done():
     while True:
         done = input("Want to do something more? ").strip().lower()
 
+        if done == 'yes':
+            return True
+
         if done == 'no':
             print("Alright have a nice day")
             return False
-        elif done == 'yes':
-            return True
-        else:
-            variables.wrong_choice()
-            print("Invalid choice please type yes or no")
-            all_done()
+
+        variables.wrong_choice()
+        print("Invalid choice please type yes or no")
 
 
 # Used so that the main command can be called from the terminal directly
@@ -83,3 +88,4 @@ if __name__ == "__main__":
         actions(sys.argv[1])
     else:
         actions()
+
