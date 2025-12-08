@@ -14,9 +14,11 @@ def menu():
         " \n movadm - Admin menu "
         " \n exit - exit the menu")
 
+
 # global helper moslty used for debug purpose
 def wrong_choice():
     print("TRY AGAIN!")
+
 
 # Global helper to take the data from the customer
 def name():
@@ -56,11 +58,24 @@ def release_year():
     while True:
         year = input("Which year was it released? ").strip()
 
-        if year.isdigit() and len(year) >= 3:
-            return int(year)
+        if not year.isdigit():
+            wrong_choice()
+            print("Year must contain digits only.")
+            continue
 
-        wrong_choice()
-        print("Please type a correct year (digits only, at least 3 characters).")
+        year_int = int(year)
+
+        if year_int < 1888:
+            wrong_choice()
+            print("Movies did not exist before 1888.")
+            continue
+
+        if year_int > 2025:
+            wrong_choice()
+            print("Year cannot be in the future.")
+            continue
+
+        return year_int
 
 
 def director_name():
@@ -77,7 +92,11 @@ def user_rating():
         rate = input("rate the movie ")
 
         try:
-            return float(rate)
+            rate_float = float(rate)
+            if rate_float < 0 or rate_float > 10:
+                print("Please use the 0 to 10 scale.")
+                continue
+            return rate_float
 
         except ValueError:
             wrong_choice()
@@ -92,7 +111,7 @@ def user_input():
     direct = director_name()
     genre = input_genre()
     rate = user_rating()
-    return (movie_name, desc, year, direct, genre, rate)
+    return movie_name, desc, year, direct, genre, rate
 
 
 # Global helper to print if the sql query comes empty
