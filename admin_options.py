@@ -39,7 +39,8 @@ def admin_actions():
             actions()
             return
         else:
-            print("WRONG CHOICE TRY AGAIN")
+            variables.wrong_choice()
+            admin_menu()
 
 
 def run_update(query, params):
@@ -96,7 +97,7 @@ def update_year():
 # THis is the engine for updating a single record in the db and uses above functions
 def admin_update():
     print("choices are 'name', 'genre', 'director', 'description', 'year' ")
-    update = input("what to update ")
+    update = input("what do you want to update ")
     if update == 'name':
         update_name()
     elif update == 'description':
@@ -108,7 +109,7 @@ def admin_update():
     elif update == 'genre':
         update_genre()
     else:
-        print("Wrong choice")
+        variables.wrong_choice()
 
 
 # Deleting just a record from the table
@@ -133,5 +134,5 @@ def admin_delete_record():
         cur.execute(f"DELETE FROM {table_to_delete} WHERE ID = ?;", (movies_id,))
         conn.commit()
         conn.close()
-        print("record", movies_id, "was deleted  from", table_to_delete)
+        print("record with ID", movies_id, "was deleted  from", table_to_delete)
         return
