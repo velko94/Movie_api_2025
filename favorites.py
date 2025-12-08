@@ -10,7 +10,7 @@ def favorites_menu(username):
 
 def favorites_engine(username):
     while True:
-        choice = input("What do you want to do ", ).strip().lower()
+        choice = input("What do you want to do in the favorites menu ", ).strip().lower()
 
         if choice == 'favlst':
             print("Soo you want to list favourite movies for the user", username)
