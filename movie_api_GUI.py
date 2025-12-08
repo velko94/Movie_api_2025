@@ -10,6 +10,7 @@ import movie_search
 import users
 import variables
 
+
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -64,6 +65,7 @@ def actions(choice=None):
         clear_screen()
         choice = None
 
+
 # asking the person if he wants to continue
 
 def all_done():
@@ -88,4 +90,3 @@ if __name__ == "__main__":
         actions(sys.argv[1])
     else:
         actions()
-
