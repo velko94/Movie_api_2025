@@ -1,7 +1,6 @@
 from pprint import pprint
 import db_connection
 import variables
-import movie_api_GUI
 
 
 def favorites_menu(username):
@@ -23,7 +22,8 @@ def favorites_engine(username):
 
         elif choice == 'lv':
             print("leave menu")
-            movie_api_GUI.actions()
+            from movie_api_GUI import actions
+            actions()
             return
 
         else:
