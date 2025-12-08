@@ -19,16 +19,15 @@ If you want to contribute or find a bug, please raise an issue.
 
 ## Installation
 
-1. Make sure you have Python installed (preferably version 3.6 or higher).
+1. Install Python 3.6+
 
-2. Install dependencies:
+2. Clone the repository:
 
-```bash
-# Installation / Setup
-1. Clone the repository:
-python movie_api_GUI.py
-````
+git clone <repo>
+cd Movie_api_2025
 
+3. Run the application python 
+ movie_api_GUI.py
 ---
 
 ## Quick Start - Movie API GUI
@@ -56,13 +55,37 @@ py .\movie_api_GUI.py
 
 ### Favorites Menu
 
-* Add or list favorite movies: `favadd` / `favlst`
-* Provide a username when prompted
+- Available options:
+
+- favadd — add a movie to your favorites
+
+- favlst — list your favorite movies
+
+- lv — leave favorites menu
+
+- You will be prompted for:
+
+- whether you are a new or returning user
+
+- your username
+
+Favorites are stored in the database under the favorites table.
 
 ### Admin Menu
 
-* Manage tables and records: list, recreate, delete, or update
-* For a detailed usage guide with examples, see **USAGE.md**.
+Admin options include:
+
+- List movies
+
+- Delete a whole table (movie, users, favorites)
+
+- Recreate a missing table
+
+- Delete a specific record
+
+- Update columns in a record
+
+- Inspect database structure
 
 ---
 
@@ -72,15 +95,15 @@ The project uses a SQLite database (`Movie.db`) with the following tables:
 
 ### `movie` table
 
-| Column       | Type    | Constraints                      | Description                      |
-|--------------|---------|----------------------------------|----------------------------------|
-| ID           | INTEGER | PRIMARY KEY AUTOINCREMENT UNIQUE | Unique identifier for each movie |
-| MOVIE_TITLE  | TEXT    | NOT NULL, UNIQUE                 | Movie title                      |
-| GENRE        | TEXT    |                                  | Movie genre                      |
-| DIRECTOR     | TEXT    |                                  | Director of the movie            |
-| DESCRIPTION  | TEXT    |                                  | Brief description of the movie   |
-| RELEASE_YEAR | INTEGER |                                  | Year the movie was released      |
-| LIKENESS     | INTEGER |                                  | User rating / likeness score     |
+| Column       | Type    | Constraints                     | Description                                     |
+|--------------|---------|---------------------------------|-------------------------------------------------|
+| ID           | INTEGER | PRIMARY KEY AUTOINCREMENT UNIQUE | Unique identifier for each movie                |
+| MOVIE_TITLE  | TEXT    | NOT NULL, UNIQUE                | Movie title                                     |
+| GENRE        | TEXT    |                                 | Movie genre                                     |
+| DIRECTOR     | TEXT    |                                 | Director of the movie                           |
+| DESCRIPTION  | TEXT    |                                 | Brief description of the movie                  |
+| RELEASE_YEAR | INTEGER |                                 | Year the movie was released                     |
+| LIKENESS     | INTEGER | Global movie rating             | User rating / likeness score |
 
 ---
 
@@ -111,19 +134,6 @@ The project uses a SQLite database (`Movie.db`) with the following tables:
 
 ---
 
-## Running the API
-
-* For a more interactive experience, run:
-
-```bash
-python movie_api_GUI.py
-```
-
-* Follow the menu prompts.
-* Type your input exactly as suggested by hints.
-* To quit in the middle of the program: press `CTRL + C`.
-
----
 
 ## Contributing
 
@@ -143,9 +153,8 @@ If you have suggestions, please fork the repo and create a pull request. You can
 ## Acknowledgements
 
 * Main acknowledgement is to **Yasen Petrov** for teaching me how to write code in Python.
-* **Gergana** for being the lead UX and UI tester and giving a non-IT perspective on UX.
-* Finding bugs I did’nt know I had.
-* Google, StackOverflow, and ChatGPT for helping find ideas and fixes.
+* **Gergana** for being the lead UX and UI tester and giving a non-IT perspective on UX and Finding bugs I did not know I had.
+* Google, StackOverflow, and ChatGPT for troubleshooting and ideas.
 
 ---
 
