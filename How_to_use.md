@@ -71,7 +71,7 @@ What is the name of the movie Shaw
 ###  Search for a Movie (`movsrch`)
 
 **Command:** `movsrch`
-**Search by:** name, genre, director, year, or description.
+**Search by:** name, genre, dir, year, or description.
 
 **Example:**
 
@@ -124,7 +124,7 @@ Just added: (18, 'Christmas on Duty', 'Former rivals Blair and Josh must work Ch
 What do you want to do movfv
 Opening favorites!
 Are you a new user? no
-What is the username you've registered with? velko
+What is the username you've registered with?
 Choices are: favlst, favadd, lv
 What do you want to do favadd
 Please type the name of the movie to add: Dark
