@@ -38,7 +38,7 @@ def old_user():
         conn, cur = db_connection.get_connection()
         cur.execute(
             "SELECT USER_NAME FROM users WHERE USER_NAME LIKE ?;",
-            ["%" + username_used + "%"])
+            [username_used])
         results = cur.fetchone()
         conn.close()
 
