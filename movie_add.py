@@ -1,10 +1,10 @@
-from variables import user_input
-from db_connection import get_connection
+import db_connection
+import variables
 
 
 def adding():
-    details = user_input()
-    conn, cur = get_connection()
+    details = variables.user_input()
+    conn, cur = db_connection.get_connection()
     cur.execute(
         "INSERT INTO movie (MOVIE_TITLE, DESCRIPTION, RELEASE_YEAR, DIRECTOR, GENRE, LIKENESS) "
         "VALUES (?,?,?,?,?,?)", details)

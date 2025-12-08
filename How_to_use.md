@@ -15,7 +15,7 @@ py .\movie_api_GUI.py
 You will see a menu like this:
 
 ```
-movslt   - List all movies
+movlst   - List all movies
 movdt    - View movie details
 movsrch  - Search for a movie
 movadd   - Add a movie
@@ -31,14 +31,14 @@ exit     - Exit the application
 
 ---
 
-###  List All Movies (`movslt`)
+###  List All Movies (`movlst`)
 
-**Command:** `movslt`
+**Command:** `movlst`
 
 Example:
 
 ```
-What do you want to do movslt
+What do you want to do movlst
 Listing all movies
 [('Christmas on Duty',), ('The Shawshank Redemption',), ...]
 ```

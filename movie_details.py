@@ -1,35 +1,45 @@
-from db_connection import get_connection
-from variables import wrong_choice, check_output, name
+import db_connection
+import variables
 
 
 def details():
-    detail = input("Do you know the name or the ID of the movie ").strip().lower()
-    if len(detail) == 0:
-        wrong_choice()
-        details()
-    elif detail == 'id':
-        conn, cur = get_connection()  # from db connections
-        detail_id = input("What is the id of the movie ").strip().lower()
-        if detail_id.isdigit():
-            int(detail_id)
+    while True:
+        detail = input("Do you know the name or the ID of the movie ").strip().lower()
+
+        if len(detail) == 0:
+            variables.wrong_choice()
+            continue
+
+        elif detail == 'id':
+            conn, cur = db_connection.get_connection()
+            detail_id = input("What is the id of the movie ")
+
+            if detail_id.isdigit():
+                cur.execute(
+                    "SELECT MOVIE_TITLE,GENRE,DIRECTOR,DESCRIPTION,RELEASE_YEAR,LIKENESS FROM movie WHERE ID=?;",
+                    [detail_id])
+                results = cur.fetchall()
+                conn.close()
+
+                variables.check_output(results)
+                return
+            else:
+                print("Please input correct id")
+                continue
+
+        elif detail == 'name':
+            detail_name = variables.name()
+
+            conn, cur = db_connection.get_connection()
             cur.execute(
-                "SELECT MOVIE_TITLE,GENRE,DIRECTOR,DESCRIPTION,RELEASE_YEAR,LIKENESS FROM movie WHERE ID=?;",
-                [detail_id])
+                "SELECT MOVIE_TITLE, DESCRIPTION, RELEASE_YEAR, DIRECTOR, GENRE, LIKENESS "
+                "FROM movie WHERE MOVIE_TITLE LIKE ?;",
+                ["%" + detail_name + "%"])
             results = cur.fetchall()
-            check_output(results)  # called from variables
+            conn.close()
+
+            variables.check_output(results)
+            return
         else:
-            print("Please input correct id")
-            details()
-    elif detail == 'name':
-        conn, cur = get_connection()
-        detail_name = name()  # called from variables name
-        cur.execute(
-            "SELECT MOVIE_TITLE, DESCRIPTION, RELEASE_YEAR, DIRECTOR, GENRE, LIKENESS "
-            "FROM movie WHERE MOVIE_TITLE LIKE ?;",
-            ["%" + detail_name + "%"])
-        results = cur.fetchall()
-        check_output(results)  # called from variables
-        conn.close()
-    else:
-        print("Please type name or id")
-        details()
+            print("Please type name or id")
+    return

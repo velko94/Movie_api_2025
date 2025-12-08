@@ -45,7 +45,7 @@ py .\movie_api_GUI.py
 
 | Command | Action                                                       |
 |---------|--------------------------------------------------------------|
-| movslt  | List all movies                                              |
+| movlst  | List all movies                                              |
 | movdt   | View movie details                                           |
 | movsrch | Search movies by name, genre, year, director, or description |
 | movadd  | Add a new movie                                              |
@@ -106,7 +106,7 @@ The project uses a SQLite database (`Movie.db`) with the following tables:
 **Notes:**
 
 * Foreign keys link favorites to users and movie.
-* The schema prevents duplicate movie titles and user names.
+* The schema prevents duplicate movie titles and usernames.
 * Update this section if the database structure changes.
 
 ---
@@ -144,7 +144,7 @@ If you have suggestions, please fork the repo and create a pull request. You can
 
 * Main acknowledgement is to **Yasen Petrov** for teaching me how to write code in Python.
 * **Gergana** for being the lead UX and UI tester and giving a non-IT perspective on UX.
-* Finding bugs I didn’t know I had.
+* Finding bugs I did’nt know I had.
 * Google, StackOverflow, and ChatGPT for helping find ideas and fixes.
 
 ---
