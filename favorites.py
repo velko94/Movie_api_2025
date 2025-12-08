@@ -1,6 +1,7 @@
 from pprint import pprint
-from db_connection import get_connection
-from variables import wrong_choice, check_output
+import db_connection
+import variables
+import movie_api_GUI
 
 
 def favorites_menu(username):
@@ -9,51 +10,79 @@ def favorites_menu(username):
 
 
 def favorites_engine(username):
-    choice = input("What do you want to do ", ).strip().lower()
-    if choice == 'favlst':
-        print("Soo you want to list favourite movies for the user", username)
-        see_list_of_favorites(username)
-    elif choice == 'favadd':
-        print("Soo you want to add a movie to favourite")
-        add_favorite_movie(username)
-    elif choice == 'lv':
-        print("leave menu")
-        import movie_api_GUI
-        movie_api_GUI.actions()
-    else:
-        wrong_choice()
-        print("please choose one of the following favlst, favadd, lv")
-        favorites_engine(username)
+    while True:
+        choice = input("What do you want to do ", ).strip().lower()
+
+        if choice == 'favlst':
+            print("Soo you want to list favourite movies for the user", username)
+            see_list_of_favorites(username)
+
+        elif choice == 'favadd':
+            print("Soo you want to add a movie to favourite")
+            add_favorite_movie(username)
+
+        elif choice == 'lv':
+            print("leave menu")
+            movie_api_GUI.actions()
+            return
+
+        else:
+            variables.wrong_choice()
+            print("please choose one of the following favlst, favadd, lv")
 
 
 def add_favorite_movie(username):
-    ad_fav = input("please type the name of the movie to add: ")
-    conn, cur = get_connection()
+    ad_fav = input("please type the name of the movie to add: ").strip(
+
+    )
+    conn, cur = db_connection.get_connection()
     cur.execute("SELECT MOVIE_TITLE,GENRE,LIKENESS FROM movie WHERE  MOVIE_TITLE LIKE ?;",
                 ["%" + ad_fav + "%"])
+
     results = cur.fetchall()
+
     if not results:
         print("No such movie found.")
         conn.close()
         return
-    check_output(results)
-    favorites_data = [(movie_name, genre, rating, username,) for (movie_name, genre, rating) in results]
-    cur.executemany("INSERT INTO favorites (MOVIE_TITLE,GENRE,RATING,FAVORITE_OF) VALUES (?,?,?,?)",
-                    favorites_data)
+
+    for (movie_name, genre, rating) in results:
+
+        if check_existing_favorite(username, movie_name):
+            print(f"Movie '{movie_name}' is already in favorites for user '{username}'.")
+            continue
+
+        else:
+            favorites_data = (movie_name, genre, rating, username,)
+            cur.execute("INSERT INTO favorites (MOVIE_TITLE,GENRE,RATING,FAVORITE_OF) VALUES (?,?,?,?)",
+                        favorites_data)
+
+            print(f" Movie {favorites_data[0]} was added successfully to favourites for the user {username} ")
     conn.commit()
     conn.close()
-    for movie in results:
-        print(f" Movie {movie[0]} was added successfully to favourites for the user {username} ")
 
 
 def see_list_of_favorites(username):
-    conn, cur = get_connection()
+    conn, cur = db_connection.get_connection()
     cur.execute(
-        "SELECT MOVIE_TITLE, GENRE, RATING FROM favorites WHERE FAVORITE_OF = ?;",
-        [username])
+        "SELECT MOVIE_TITLE, GENRE, RATING FROM favorites WHERE FAVORITE_OF = ?;", [username]
+    )
     results = cur.fetchall()
     if results:
         pprint(results)
     else:
         print("No favorites for this user")
     conn.close()
+
+
+def check_existing_favorite(username, movie_title):
+    conn, cur = db_connection.get_connection()
+    cur.execute("""
+        SELECT 1 
+        FROM favorites 
+        WHERE MOVIE_TITLE = ? AND FAVORITE_OF = ?;
+    """, (movie_title, username))
+
+    results = cur.fetchone()
+    conn.close()
+    return results is not None
