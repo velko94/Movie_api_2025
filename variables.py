@@ -1,122 +1,108 @@
-from pprint import pprint
-
-import db_actions
+global movie_name, genre, desc, year, direct, rate
 
 
 def menu():
     print(
-        " movlst - want to list all movies "
-        "\n movdt - want to see this movies details  "
-        "\n movsrch - want to search for a movie"
-        "\n movadd - want to add a movie "
-        "\n movfv - Want to add a movie to favorites or see existing favorite "
-        " \n movcat - want to see top 5 movies "
-        " \n movadm - Admin menu "
-        " \n exit - exit the menu")
+        "(1 want to list all movies \n(2 want to see this movies details \n(3 want to search for a movie "
+        "\n(4 want to add a movie"
+        "\n(5 Want to add a movie to favorites or see existing favorite\n(6 want to see top 5 movies\n(7 Admin menu")
 
 
-# global helper moslty used for debug purpose
 def wrong_choice():
-    print("TRY AGAIN!")
+    print("!!!!!!TRY AGAIN!!!!!")
 
 
-# Global helper to take the data from the customer
 def name():
-    while True:
-        movie_name = input("what is the name of the movie ").strip()
-
-        if len(movie_name) > 1:
-            return movie_name
-
-        wrong_choice()
-        print("Not a correct name")
+    global movie_name
+    movie_name = input("what is the name of the movie ")
+    check_input_name()
+    return movie_name
 
 
 def input_genre():
-    while True:
-        genre = input("In what genre is the movie ").strip()
-
-        if len(genre) > 1:
-            return genre
-
-        wrong_choice()
-        print("Not a correct genre")
+    global genre
+    genre = input("In what genre is the movie ")
+    check_input_genre()
+    return genre
 
 
 def description():
-    while True:
-        desc = input("Please say something about the movie ").strip()
-
-        if len(desc) > 1:
-            return desc
-
-        wrong_choice()
-        print("Not a correct description")
+    global desc
+    desc = input("Please say something about the movie ")
+    check_input_desc()
+    return desc
 
 
 def release_year():
-    while True:
-        year = input("Which year was it released? ").strip()
-
-        if not year.isdigit():
-            wrong_choice()
-            print("Year must contain digits only.")
-            continue
-
-        year_int = int(year)
-
-        if year_int < 1888:
-            wrong_choice()
-            print("Movies did not exist before 1888.")
-            continue
-
-        if year_int > 2025:
-            wrong_choice()
-            print("Year cannot be in the future.")
-            continue
-
-        return year_int
+    global year
+    year = input("what year was it released ")
+    try:
+        int(year)
+    except ValueError:
+        wrong_choice()
+        release_year()
+        return year
 
 
 def director_name():
-    while True:
-        direct = input("Who directed the movie ").strip()
-        if len(direct) > 1:
-            return direct
-        wrong_choice()
-        print("Not a correct director")
+    global direct
+    direct = input("Who directed the movie ")
+    check_input_dir()
+    return direct
 
 
 def user_rating():
-    while True:
-        rate = input("rate the movie ")
+    global rate
+    rate = float(input("rate the movie "))
+    try:
+        float(rate)
+    except ValueError:
+        wrong_choice()
+        user_rating()
+        return rate
 
-        try:
-            rate_float = float(rate)
-            if rate_float < 0 or rate_float > 10:
-                print("Please use the 0 to 10 scale.")
-                continue
-            return rate_float
 
-        except ValueError:
-            wrong_choice()
-            print("Invalid input. Please enter a correct number. (e.g. 3.5)")
+#######################Checks for empty string#######################
+
+def check_input_name():
+    if len(movie_name) <= 1:
+        wrong_choice()
+        name()
+    else:
+        return movie_name
+
+
+def check_input_genre():
+    if len(genre) <= 1:
+        wrong_choice()
+        input_genre()
+    else:
+        return genre
+
+
+def check_input_desc():
+    if len(desc) <= 1:
+        wrong_choice()
+        description()
+    else:
+        return desc
+
+
+def check_input_dir():
+    if len(direct) == 0:
+        wrong_choice()
+        director_name()
+    else:
+        return direct
 
 
 # Takes all the required fields and stores them for future use
 def user_input():
-    movie_name = db_actions.get_unique_movie_title()
-    desc = description()
-    year = release_year()
-    direct = director_name()
-    genre = input_genre()
-    rate = user_rating()
-    return movie_name, desc, year, direct, genre, rate
-
-
-# Global helper to print if the sql query comes empty
-def check_output(results):
-    if results and len(results) > 0:
-        pprint(results)
-    else:
-        print("No such record!")
+    name()
+    input_genre()
+    description()
+    director_name()
+    release_year()
+    user_rating()
+    movie_details = (movie_name, genre, direct, desc, year, rate)
+    return movie_details

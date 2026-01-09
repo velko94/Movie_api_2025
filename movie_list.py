@@ -1,20 +1,19 @@
-import variables
-import db_connection
+from pprint import pprint
 
 
 def list_of_movies():
-    conn, cur = db_connection.get_connection()
+    import sqlite3
+    conn = sqlite3.connect("Movie.db")
+    cur = conn.cursor()
     print("Here is what we have stored in the library")
-    cur.execute('SELECT MOVIE_TITLE FROM movie ORDER BY ID')
-    results = cur.fetchall()
-    variables.check_output(results)
-    conn.close()
+    cur.execute('SELECT MOVIE_NAME FROM movie GROUP BY ID')
+    pprint(cur.fetchall())
 
 
 def list_of_movies_admin():
-    conn, cur = db_connection.get_connection()
+    import sqlite3
+    conn = sqlite3.connect("Movie.db")
+    cur = conn.cursor()
     print("Here is what we have stored in the library")
-    cur.execute('SELECT ID, MOVIE_TITLE FROM movie ORDER BY ID')
-    results = cur.fetchall()
-    variables.check_output(results)
-    conn.close()
+    cur.execute('SELECT ID, MOVIE_NAME FROM movie GROUP BY ID')
+    pprint(cur.fetchall())

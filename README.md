@@ -1,194 +1,56 @@
-# Movie_api_GUI
 
-This is an API that works from the CLI (command-line interface). Its purpose is to be used in a site to manage a movie
-library, which will be built later.
 
-With this API, you can:
+# Movie_api
 
-- View the movie library
-- See details for a specific movie
-- Add a new movie
-- Search for a movie
-- Add movies to favorites and view your favorites
-- See the top 5 movies based on different criteria
-- Access admin features to manage the library
+This is a api that is working from the CLI (command line interface) its purpose is to be used in site to manage library for movies.Which site would be build later on. With it you can see the libray,see details for a specific movie,add a new movie, search for a movie, add movie to favorites and see the favorites which are for you,see the top 5 movies based on diferent criterias,and some admin features to manage the libary. if you want to contribute or find some bug please raise a issue
 
-If you want to contribute or find a bug, please raise an issue.
-
----
 
 ## Installation
+python 
+  pip install argparse
+  python movie_api_GUI.py
 
-1. Install Python 3.6+
+### Prerequisites: 
+You would need to have python installed on you PC preferably any version after 3.6 and argparse.
 
-2. Clone the repository:
 
-git clone <repo>
-cd Movie_api_2025
-
-3. Run the application python 
- movie_api_GUI.py
----
-
-## Quick Start - Movie API GUI
-
-### Running the Application
-
-1. Run the application:
-
-```powershell
-py .\movie_api_GUI.py
-```
-
-### Main Commands
-
-| Command | Action                                                       |
-|---------|--------------------------------------------------------------|
-| movlst  | List all movies                                              |
-| movdt   | View movie details                                           |
-| movsrch | Search movies by name, genre, year, director, or description |
-| movadd  | Add a new movie                                              |
-| movfv   | Manage favorites                                             |
-| movcat  | View top 5 movies by rating, year, or genre                  |
-| movadm  | Admin menu (table management)                                |
-| exit    | Exit the application                                         |
-
-### Favorites Menu
-
-- Available options:
-
-- favadd — add a movie to your favorites
-
-- favlst — list your favorite movies
-
-- lv — leave favorites menu
-
-- You will be prompted for:
-
-- whether you are a new or returning user
-
-- your username
-
-Favorites are stored in the database under the favorites table.
-
-### Admin Menu
-
-Admin options include:
-
-- List movies
-
-- Delete a whole table (movie, users, favorites)
-
-- Recreate a missing table
-
-- Delete a specific record
-
-- Update columns in a record
-
-- Inspect database structure
-
----
-
-## Database Schema
-
-The project uses a SQLite database (`Movie.db`) with the following tables:
-
-### `movie` table
-
-| Column       | Type    | Constraints                     | Description                                     |
-|--------------|---------|---------------------------------|-------------------------------------------------|
-| ID           | INTEGER | PRIMARY KEY AUTOINCREMENT UNIQUE | Unique identifier for each movie                |
-| MOVIE_TITLE  | TEXT    | NOT NULL, UNIQUE                | Movie title                                     |
-| GENRE        | TEXT    |                                 | Movie genre                                     |
-| DIRECTOR     | TEXT    |                                 | Director of the movie                           |
-| DESCRIPTION  | TEXT    |                                 | Brief description of the movie                  |
-| RELEASE_YEAR | INTEGER |                                 | Year the movie was released                     |
-| LIKENESS     | INTEGER | Global movie rating             | User rating / likeness score |
-
----
-
-### `users` table
-
-| Column    | Type    | Constraints               | Description                     |
-|-----------|---------|---------------------------|---------------------------------|
-| ID        | INTEGER | PRIMARY KEY AUTOINCREMENT | Unique identifier for each user |
-| USER_NAME | TEXT    | NOT NULL, UNIQUE          | Username                        |
-
----
-
-### `favorites` table
-
-| Column      | Type    | Constraints                                | Description                               |
-|-------------|---------|--------------------------------------------|-------------------------------------------|
-| ID          | INTEGER | PRIMARY KEY AUTOINCREMENT                  | Unique identifier for each favorite entry |
-| MOVIE_TITLE | TEXT    | NOT NULL, FOREIGN KEY → movie(MOVIE_TITLE) | Title of the favorite movie               |
-| GENRE       | TEXT    |                                            | Genre of the favorite movie               |
-| RATING      | FLOAT   |                                            | Rating given by the user                  |
-| FAVORITE_OF | TEXT    | FOREIGN KEY → users(USER_NAME)             | User who added this movie to favorites    |
-
-**Notes:**
-
-* Foreign keys link favorites to users and movie.
-* The schema prevents duplicate movie titles and usernames.
-* Update this section if the database structure changes.
-
----
-
+##  Features
+Movie Api GUI version 
+: If you want to use the Gui version...which i prefer and recomend  just type in the following
+<p1 style="color:yellow">"python movie_api_GUI.py"</p1>
+:After the menu would guide you..and there are hints on what to type please try and type it same as the hint or copy paste it. 
+:Should you want to quit in the middle of the program just type <p2 style="color:blue">CTRL + C </p2> to kill the program!  
 
 ## Contributing
 
-If you have suggestions, please fork the repo and create a pull request. You can also open an issue with the tag *
-*enhancement**.
 
-**Steps:**
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again!
 
-1. Fork the project.
-2. Create your feature branch: `git checkout -b feature/AmazingFeature`
-3. Commit your changes: `git commit -m 'Add some AmazingFeature'`
-4. Push to the branch: `git push origin feature/AmazingFeature`
-5. Open a pull request
-
----
+1.Fork the Project 
+2.Create your Feature Branch (git checkout -b feature/AmazingFeature)
+ 3.Commit your Changes (git commit -m 'Add some AmazingFeature') 
+ 4.Push to the Branch (git push origin feature/AmazingFeature)
+5.Open a Pull Request
 
 ## Acknowledgements
 
-* Main acknowledgement is to **Yasen Petrov** for teaching me how to write code in Python.
-* **Gergana** for being the lead UX and UI tester and giving a non-IT perspective on UX and Finding bugs I did not know I had.
-* Google, StackOverflow, and ChatGPT for troubleshooting and ideas.
+Contributors: Main aknowledgemnt is to Yasen Petrov for teaching me in how to write code in python. 
+My wife Gergana for being the lead UX and UI tester and giving me a non IT perspective on the UX.
+And finding even the bugs i didn't know i had :D. And to Google and Stackoverflow for helping find ideas on how to fix the Errors.
 
----
 
 ## Authors
 
-[@Velko Rizov](https://bg.linkedin.com/in/velko-rizov-548049177) – [vrizov5@gmail.com](mailto:vrizov5@gmail.com)
+[@Velko Rizov](https://bg.linkedin.com/in/velko-rizov-548049177 -vrizov5@gmail.com)
 
----
 
 ## Roadmap
+In the near future the api would be moved from a cli to a real site where you can do the same but with some visual representation of the functonalities in the api.
+Either using Django or by making a custom HTML,CSS,JS,site myself. 
+There would be a login screen in order to have better UX for each user.
+The movie_details page would give more options to look at the movie not only by providing the name At least the all_done() function would be tried to be rewriten in order to be stored in one place and user across the project And another backbone or more generic function would be created for the user choice yes/no in order to have it one place.
 
-* Move the API from CLI to a website (Django or custom HTML/CSS).
-* Implement login for better UX.
-* Enhance movie details page for more options.
-* Refactor `all_done()` function to be reusable across the project.
-* Create a generic yes/no user choice function.
-* Implement user login for personalized experience.
-
----
 
 ## License
 
-Unlicensed. Intellectual rights for the API idea belong to Skillo; code rights belong to the author.
-
-```
-
----
-
- **Changes made**:  
-1. Added clear **horizontal rules (`---`)** to separate major sections.  
-2. Used **headings (`##`, `###`)** for subsections like Database Tables, Favorites Menu, Admin Menu.  
-3. Formatted tables and lists consistently for readability.  
-4. Preserved **all original content exactly**.  
-
----
-
-```
+License: unlicensed the intelectual rights for the idea of the Api are for Skillo the right to the code are to me

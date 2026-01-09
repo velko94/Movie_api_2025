@@ -1,7 +1,6 @@
-import db_actions
-import db_connection
 import movie_list
-import variables
+import variables, db_actions
+global movid
 
 
 def admin_menu():
@@ -11,128 +10,130 @@ def admin_menu():
     print("choice 4:want to delete a record from a table")
     print("choice 5:want to change something in a record")
     print("choice 6:want to exit the admin menu")
-    admin_actions()
 
 
-# The functionalities for the admin menu
 def admin_actions():
-    while True:
-        choice = input("What do you want to do use only digits ", )
-        if choice == '1':
-            movie_list.list_of_movies_admin()
-            print("choice 1:want to list all movies")
-        elif choice == '2':
-            print("Soo choice 2:want to recreate a  table")
-            db_actions.recreate_existing_table()
-        elif choice == '3':
-            print("choice 3:want to delete a whole table")
-            db_actions.table_delete()
-        elif choice == '4':
-            print("choice 4: So want to delete a record from a table")
-            admin_delete_record()
-        elif choice == '5':
-            print("choice 5:want to change something in a record")
-            admin_update()
-        elif choice == '6':
-            print("WELCOME THE THE USER MENU")
-            from movie_api_GUI import actions
-            actions()
-            return
-        else:
-            variables.wrong_choice()
-            admin_menu()
+    admin_menu()
+    choice = input("What do you want to do ", )
+    if choice == '1':
+        movie_list.list_of_movies_admin()
+        print("choice 1:want to list all movies")
+    elif choice == '2':
+        print("Soo choice 2:want to recreate a  table")
+        db_actions.recreate_existing_table()
+    elif choice == '3':
+        print("choice 3:want to delete a whole table")
+        db_actions.table_delete()
+    elif choice == '4':
+        print("choice 4: So want to delete a record from a table")
+        admin_delete_record()
+    elif choice == '5':
+        print("choice 5:want to change something in a record")
+        admin_update()
+    elif choice == '6':
+        print("WELCOME THE THE USER MENU")
+        from movie_api_GUI import actions
+        actions()
+    else:
+        print("Wrong choice")
+        admin_menu()
 
 
-def run_update(query, params):
-    conn, cur = db_connection.get_connection()
-    try:
-        cur.execute(query, params)
-        conn.commit()
-    finally:
-        conn.close()
-
-
-# FUNCTIONS FOR UPDATES ON EXISTING RECORDS#
-
+####################################### FUNCTIONS FOR UPDATES ON EXISTING RECORDS######################################
 def movie_id():
-    while True:
-        movid = input("What is the id: ").strip()
-        if movid.isdigit():
-            return int(movid)
-
-        print("ID must be a number.")
+    global movid
+    movid = input("What is the id of the movie ")
+    return movid
 
 
 def update_name():
-    print("Change the name to the value you wish to be")
-    new_name = variables.name()
-    id_value = movie_id()
-    run_update("UPDATE movie SET MOVIE_TITLE=? WHERE ID=?;", [new_name, id_value])
+    import sqlite3
+    conn = sqlite3.connect("Movie.db")
+    cur = conn.cursor()
+    variables.name()
+    movie_id()
+    cur.execute("UPDATE movie SET MOVIE_NAME=?WHERE ID=?;", [variables.movie_name, movid])
+    conn.commit()
+    conn.close()
 
 
 def update_genre():
-    new_genre = variables.input_genre()
-    id_value = movie_id()
-    run_update("UPDATE movie SET GENRE=?  WHERE ID=? ", [new_genre, id_value])
+    import sqlite3
+    conn = sqlite3.connect("Movie.db")
+    cur = conn.cursor()
+    variables.input_genre()
+    movie_id()
+    cur.execute("UPDATE movie SET GENRE=?  WHERE ID=? ", [variables.genre, movid])
+    conn.commit()
+    conn.close()
 
 
 def update_director():
-    new_dir = variables.director_name()
-    id_value = movie_id()
-    run_update("UPDATE movie SET DIRECTOR=?  WHERE ID=? ", [new_dir, id_value])
+    import sqlite3
+    conn = sqlite3.connect("Movie.db")
+    cur = conn.cursor()
+    variables.director_name()
+    movie_id()
+    cur.execute("UPDATE movie SET DIRECTOR=?  WHERE ID=? ", [variables.direct, movid])
+    conn.commit()
+    conn.close()
 
 
 def update_desc():
-    new_desc = variables.description()
-    id_value = movie_id()
-    run_update("UPDATE movie SET DESCRIPTION=?  WHERE ID=? ", [new_desc, id_value])
+    import sqlite3
+    conn = sqlite3.connect("Movie.db")
+    cur = conn.cursor()
+    variables.description()
+    movie_id()
+    cur.execute("UPDATE movie SET DESCRIPTION=?  WHERE ID=? ", [variables.description, movid])
+    conn.commit()
+    conn.close()
 
 
 def update_year():
-    new_year = variables.release_year()
-    id_value = movie_id()
-    run_update("UPDATE movie SET RELEASE_YEAR=?  WHERE ID=? ", [new_year, id_value])
+    import sqlite3
+    conn = sqlite3.connect("Movie.db")
+    cur = conn.cursor()
+    variables.release_year()
+    movie_id()
+    cur.execute("UPDATE movie SET RELEASE_YEAR=?  WHERE ID=? ", [variables.year, movid])
+    conn.commit()
+    conn.close()
 
 
-# THis is the engine for updating a single record in the db and uses above functions
 def admin_update():
-    print("choices are 'name', 'genre', 'director', 'description', 'year' ")
-    update = input("what do you want to update ")
-    if update == 'name':
+    update = str(input("what to update "))
+    update_choice = ['name', 'genre', 'director', 'description', 'year']
+    if update == update_choice[0]:
         update_name()
-    elif update == 'description':
-        update_desc()
-    elif update == 'year':
-        update_year()
-    elif update == 'director':
-        update_director()
-    elif update == 'genre':
+    elif update == update_choice[1]:
         update_genre()
+    elif update == update_choice[2]:
+        update_director()
+    elif update == update_choice[3]:
+        update_desc()
+    elif update == update_choice[4]:
+        update_year()
     else:
-        variables.wrong_choice()
+        print("Wrong choice")
 
 
-# Deleting just a record from the table
+# NOT working for the moment
+# def update_id():
+#     name()
+#     movie_id()
+#     cur.execute("UPDATE movie SET ID=?  WHERE MOVIE_NAME=? ", [movid,movie_name])
+#     conn.commit()
+
+#Deleting just a record from the table
 def admin_delete_record():
-    while True:
-        allowed_tables = [t.lower() for t in db_actions.check_existing_tables()]
-        table_to_delete = input("What is the name of the table: ").strip().lower()
-        if table_to_delete not in allowed_tables:
-            print("Invalid table name!")
-            continue
-
-        movies_id = movie_id()
-        conn, cur = db_connection.get_connection()
-        cur.execute(f"SELECT 1 FROM {table_to_delete} WHERE ID = ?", (movies_id,))
-        result = cur.fetchone()
-
-        if not result:
-            print(f"No record with ID {movies_id} in table {table_to_delete}.")
-            conn.close()
-            continue
-
-        cur.execute(f"DELETE FROM {table_to_delete} WHERE ID = ?;", (movies_id,))
-        conn.commit()
-        conn.close()
-        print("record with ID", movies_id, "was deleted  from", table_to_delete)
-        return
+    table_to_delete = input("what is the name of the table ")
+    movie_id()
+    import sqlite3
+    conn = sqlite3.connect("Movie.db")
+    cur = conn.cursor()
+    cur.execute(f"DELETE FROM {table_to_delete} WHERE ID = ? ;", [movid])
+    # db_actions.check_existing_tables()
+    conn.commit()
+    conn.close()
+    print("record", movid, "was deleted  from", table_to_delete)

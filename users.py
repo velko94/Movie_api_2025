@@ -1,64 +1,53 @@
-import db_connection
 import favorites
 import variables
 
 
-def new_user():
-    conn, cur = db_connection.get_connection()
-
-    while True:
-        user = input("What is your username? ").strip()
-
-        if len(user) <= 3:
-            print("Must be at least 4 characters long")
-            continue
-
-        # check if username already exists
-        cur.execute("SELECT USER_NAME FROM users WHERE USER_NAME = ?", [user])
-        if cur.fetchone():
-            print("This username already exists. Choose a different one.")
-            continue
-
-        # insert new user
-        cur.execute("INSERT INTO Users (USER_NAME) VALUES (?)", [user])
+def new_username():
+    global username
+    username = input("what is your username? ")
+    if len(username) <= 2:
+        variables.wrong_choice()
+        print("Must be at least 4 chars")
+        new_username()
+    else:
+        import sqlite3
+        conn = sqlite3.connect("Movie.db")
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Users (USER_NAME) VALUES(?)", [username])
         conn.commit()
-        print(f"The user {user} was added to table users")
-        print("Greetings", user.upper())
-
-        favorites.favorites_menu(user)
-        break
-
-    conn.close()
+        conn.close()
+    print("Welcome", username)
+    favorites.favorites_menu()
 
 
 def old_user():
-    while True:
-        username_used = input("what is the username you've registered with? ")
-
-        conn, cur = db_connection.get_connection()
-        cur.execute(
-            "SELECT USER_NAME FROM users WHERE USER_NAME LIKE ?;",
-            [username_used])
-        results = cur.fetchone()
-        conn.close()
-
-        if results:
-            print(f"Greetings {results[0]}")
-            favorites.favorites_menu(results[0])
-            return results[0]
-
-        else:
-            print("No such record!")
+    username = input("what is the username you've registered with? ")
+    import sqlite3
+    conn = sqlite3.connect("Movie.db")
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT USER_NAME FROM users WHERE USER_NAME LIKE ?;",
+        [username])
+    global record
+    record = cur.fetchone()
+    conn.close
+    if record is None:
+        print("no such user")
+        check_user()
+    else:
+        print("Welcome", record)
+        favorites.favorites_menu()
 
 
 def check_user():
-    while True:
-        user = input("Are you a new user? choices are yes or no ").strip().lower()
-
-        if user == "no":
-            return old_user()
-        elif user == "yes":
-            return new_user()
-        else:
-            variables.wrong_choice()
-            print("Please type yes or no")
+    user = input("Are you a new user? ")
+    answer1 = "no"
+    answer2 = "yes"
+    if user == answer1:
+        old_user()
+    elif user == answer2:
+        new_username()
+    else:
+        variables.wrong_choice()
+        check_user()

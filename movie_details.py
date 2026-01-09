@@ -1,45 +1,29 @@
-import db_connection
 import variables
+from pprint import pprint
 
 
 def details():
-    while True:
-        detail = input("Do you know the name or the ID of the movie ").strip().lower()
-
-        if len(detail) == 0:
-            variables.wrong_choice()
-            continue
-
-        elif detail == 'id':
-            conn, cur = db_connection.get_connection()
-            detail_id = input("What is the id of the movie ")
-
-            if detail_id.isdigit():
-                cur.execute(
-                    "SELECT MOVIE_TITLE,GENRE,DIRECTOR,DESCRIPTION,RELEASE_YEAR,LIKENESS FROM movie WHERE ID=?;",
-                    [detail_id])
-                results = cur.fetchall()
-                conn.close()
-
-                variables.check_output(results)
-                return
-            else:
-                print("Please input correct id")
-                continue
-
-        elif detail == 'name':
-            detail_name = variables.name()
-
-            conn, cur = db_connection.get_connection()
-            cur.execute(
-                "SELECT MOVIE_TITLE, DESCRIPTION, RELEASE_YEAR, DIRECTOR, GENRE, LIKENESS "
-                "FROM movie WHERE MOVIE_TITLE LIKE ?;",
-                ["%" + detail_name + "%"])
-            results = cur.fetchall()
-            conn.close()
-
-            variables.check_output(results)
-            return
-        else:
-            print("Please type name or id")
-    return
+    detail = str(input("Do you know the name or the ID of the movie "))
+    if len(detail) == 0:
+        variables.wrong_choice()
+        details()
+    elif detail == 'id':
+        import sqlite3
+        conn = sqlite3.connect("Movie.db")
+        cur = conn.cursor()
+        detail_id = int(input("What is the id of the movie "))
+        cur.execute(
+            "SELECT MOVIE_NAME,GENRE,DIRECTOR,DESCRIPTION,RELEASE_YEAR,LIKENESS FROM movie WHERE ID=?;", [detail_id])
+        pprint(cur.fetchall())
+    elif detail == 'name':
+        import sqlite3
+        conn = sqlite3.connect("Movie.db")
+        cur = conn.cursor()
+        detail_name = str(input("What is the name of the movie "))
+        cur.execute(
+            "SELECT MOVIE_NAME,GENRE,DIRECTOR,DESCRIPTION,RELEASE_YEAR,LIKENESS FROM movie WHERE MOVIE_NAME LIKE ?;",
+            ["%" + detail_name + "%"])
+        pprint(cur.fetchall())
+    else:
+        print("Wrong answer")
+        details()
